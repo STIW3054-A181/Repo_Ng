@@ -1,1 +1,118 @@
 progress 11/12 (no complete)
+
+```java 
+without executor and callable
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Map;
+import java.util.TreeMap;
+
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.text.PDFTextStripper;
+
+public class Extractor {
+
+    public static void main(String[] args) throws FileNotFoundException {
+        Map<String, Integer> wordFrequencies = new TreeMap<String, Integer>();
+        Map<Character, Integer> charFrequencies = new TreeMap<Character, Integer>();
+        PDDocument pd;
+        File input = new File("C:/Users/Dell/Desktop/asdfghjkl.pdf");
+        try {
+            pd = PDDocument.load(input);
+            PDFTextStripper stripper = new PDFTextStripper();
+            stripper.setEndPage(20);
+            String text = stripper.getText(pd);
+            for(int i=0; i<text.length(); i++)
+            {
+                char c = text.charAt(i);
+                int count = charFrequencies.get(c) != null ? (charFrequencies.get(c)) + 1 : 1;
+                charFrequencies.put(c, count);
+            }
+            String[] texts = text.split(" ");
+            for (String txt : texts) {
+                int count = wordFrequencies.get(txt) != null ? (wordFrequencies.get(txt)) + 1 : 1;
+                wordFrequencies.put(txt, count);
+
+            }
+
+            System.out.println("Printing the number of words");
+            for (String key : wordFrequencies.keySet()) {
+                System.out.println(key + ": " + wordFrequencies.get(key));
+            }
+
+            System.out.println("Printing the number of characters");
+            for (char charKey : charFrequencies.keySet()) {
+                System.out.println(charKey + ": " + charFrequencies.get(charKey));
+            }
+
+            if (pd != null) {
+                pd.close();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+```
+
+with executor and callable
+```java
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.text.PDFTextStripper;
+
+public class Extractor {
+
+    public static void main(String[] args) throws FileNotFoundException {
+        ExecutorService executor = Executors.newFixedThreadPool(2);
+        Future<Integer> future1 = executor.submit(new LineCounter(new File("C:/Users/Dell/Desktop/realtimeTask/file1.txt")));
+        Future<Integer> future2 = executor.submit(new LineCounter(new File("C:/Users/Dell/Desktop/realtimeTask/file2.txt")));
+        try {
+            Integer file1Lines = future1.get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        try {
+            Integer file2Lines = future2.get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+import java.io.File;
+import java.util.concurrent.Callable;
+
+
+
+class LineCounter implements Callable<Integer> {
+    private final File file;
+    int numLines;
+
+    public LineCounter(File file) {
+        this.file = file;
+    }
+
+    public Integer call() {
+        // Count number of lines in file.
+        return numLines;
+    }
+}
+
+
+
