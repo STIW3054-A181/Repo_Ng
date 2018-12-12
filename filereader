@@ -1,0 +1,60 @@
+private final static int NUM_CPUS = 4;
+
+private final Executor _fileReaderWriter = Executors.newSingleThreadExecutor();
+private final Executor _fileProcessor = Executors.newFixedThreadPool(NUM_CPUS);
+
+private final class Data {}
+private final class ProcessedData {}
+
+private final class FileReader implements Runnable
+{
+  private final File _file;
+  FileReader(final File file) { _file = file; }
+  @Override public void run() 
+  { 
+    final Data data = readFile(_file);
+    _fileProcessor.execute(new FileProcessor(_file, data));
+  }
+
+  private Data readFile(File file) { /* ... */ return null; }    
+}
+
+private final class FileProcessor implements Runnable
+{
+  private final File _file;
+  private final Data _data;
+  FileProcessor(final File file, final Data data) { _file = file; _data = data; }
+  @Override public void run() 
+  { 
+    final ProcessedData processedData = processData(_data);
+    _fileReaderWriter.execute(new FileWriter(_file, processedData));
+  }
+
+  private ProcessedData processData(final Data data) { /* ... */ return null; }
+}
+
+private final class FileWriter implements Runnable
+{
+  private final File _file;
+  private final ProcessedData _data;
+  FileWriter(final File file, final ProcessedData data) { _file = file; _data = data; }
+  @Override public void run() 
+  { 
+    writeFile(_file, _data);
+  }
+
+  private Data writeFile(final File file, final ProcessedData data) { /* ... */ return null; }
+}
+
+public void process(final File file)   
+{ 
+  if (file.isDirectory())
+  {
+    for (final File subFile : file.listFiles())
+      process(subFile);
+  }
+  else
+  {
+    _fileReaderWriter.execute(new FileReader(file));
+  }
+}
