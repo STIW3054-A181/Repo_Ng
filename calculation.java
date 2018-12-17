@@ -3,25 +3,27 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mycompany.issues19;
+package com.mycompany.group;
 
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-
+import java.util.concurrent.Callable;
 
 /**
  *
  * @author lenovo
  */
-public class Main {
-    public static void main(String[] args) throws InterruptedException, ExecutionException{
-        int N=211;
-        ExecutorService executor=Executors.newCachedThreadPool();
-        Test test=new Test(N);
-        Future<Integer> result=executor.submit(test);
-        System.out.println("Value of N:"+N);
-        System.out.println("Total :"+result.get());
+public class calculation implements Callable{
+    int word;
+    int character;
+    double mean=0;
+    double SD=0;
+    public calculation(int word, int character){
+        this.word=word;
+        this.character=character;
     }
-}
+    @Override
+    public Integer call() throws Exception {
+        mean=character/word;
+        SD=Math.sqrt(Math.pow((character-mean),2)/word);
+        return (int)SD;
+    }
+    }
