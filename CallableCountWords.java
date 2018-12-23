@@ -28,6 +28,7 @@ public class CallableCountWords implements Callable<Integer> {
             
             String[] words = line.split(" ");
             wordCounter += words.length;
+            
             line = bf.readLine();
         }
         
