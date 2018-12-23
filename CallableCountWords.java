@@ -1,11 +1,7 @@
 import java.io.BufferedReader;
-
 import java.io.File;
-
 import java.io.FileReader;
-
 import java.io.IOException;
-
 import java.util.concurrent.Callable;
 
 
@@ -17,9 +13,7 @@ public class CallableCountWords implements Callable<Integer> {
 
 
     public CallableCountWords(File input) {
-
         this.input = input;
-
     }
 
 
@@ -27,25 +21,19 @@ public class CallableCountWords implements Callable<Integer> {
     public Integer call() throws IOException {
 
         BufferedReader bf = new BufferedReader(new FileReader(input));
-
-        String line = null;
-
+        String line = bf.readLine();
         int wordCounter = 0;
 
-        while ((line = bf.readLine()) != null) {
-
+        while (line != null) {
+            
             String[] words = line.split(" ");
-
             wordCounter += words.length;
-
+            
+            line = bf.readLine();
         }
-
+        
         bf.close();
-
         return wordCounter;
-
     }
-
-
 
 }
