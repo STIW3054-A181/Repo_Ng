@@ -65,12 +65,12 @@ public class Main {
 
         for (int i = 0; i < pdf.size(); i++) {
             System.out.println(pdf.get(i).getName());
-            System.out.println(pdf.get(i).getDir());
-            System.out.println(pdf.get(i).getwords());
-            System.out.println(pdf.get(i).getcharacters());
-            System.out.println(pdf.get(i).getmean());
-            System.out.println(pdf.get(i).getsd());
-            System.out.println(pdf.get(i).getzscore());
+            System.out.println("File Direction            : "+pdf.get(i).getDir());
+            System.out.println("Total number of words     : "+pdf.get(i).getwords());
+            System.out.println("Total number of Character : "+pdf.get(i).getcharacters());
+            System.out.println("Mean                      : "+pdf.get(i).getmean());
+            System.out.println("Standard Deviation        : "+pdf.get(i).getsd());
+            System.out.println("Z-Score                   : "+pdf.get(i).getzscore());
             System.out.println("");
             System.out.println("");
 
