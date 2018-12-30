@@ -1,4 +1,4 @@
 # Repo_Ng
 
-Name: Low Ying Ying
+Name: Low Yin Ying
 Matric: 244894
